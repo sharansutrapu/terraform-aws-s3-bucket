@@ -1385,7 +1385,7 @@ resource "aws_s3_bucket_analytics_configuration" "this" {
 }
 
 resource "aws_s3_bucket_abac" "this" {
-  count = local.create_bucket && length(keys(var.abac_status)) > 0 && !var.is_directory_bucket ? 1 : 0
+  count = local.create_bucket && var.abac_status != null && !var.is_directory_bucket ? 1 : 0
 
   bucket                = aws_s3_bucket.this[0].id
   expected_bucket_owner = var.expected_bucket_owner

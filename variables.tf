@@ -149,9 +149,19 @@ variable "force_destroy" {
 }
 
 variable "abac_status" {
-  description = "Map containing ABAC (Attribute Based Access Control) configuration"
-  type        = any
-  default     = {}
+  description = "ABAC (Attribute Based Access Control) status for a general-purpose S3 bucket."
+  type = object({
+    status = optional(string, "Enabled")
+  })
+  default = null
+
+  validation {
+    condition = try(
+      contains(["Enabled", "Disabled"], var.abac_status.status),
+      var.abac_status == null
+    )
+    error_message = "The abac_status.status must be 'Enabled' or 'Disabled'."
+  }
 }
 
 variable "acceleration_status" {
